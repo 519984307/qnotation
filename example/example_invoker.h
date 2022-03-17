@@ -38,12 +38,12 @@ public:
 //! \brief The Invoker class
 //!
 //! class demo to Invoke method
-class Invoker : public QObject, public Private::NotationsDefines
+class Invoker : public QObject, public NotationsDefines
 {
     Q_OBJECT
 public:
     explicit Invoker(QObject *parent = nullptr)
-        : QObject{parent}
+        : QObject{parent}, NotationsDefines{parent}
     {
     }
 

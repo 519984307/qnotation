@@ -5,12 +5,13 @@
 
 namespace NotationExample {
 
-class Object : public QNotation::Object<QObject>, public Private::NotationsDefines {
+class Object : public QObject, public NotationsDefines {
     Q_OBJECT
 public:
     Q_INVOKABLE explicit Object(QObject*parent=nullptr)
         :
-          QNotation::Object<QObject>{parent}
+          QObject{parent},
+          NotationsDefines{this}
     {
     }
 };
