@@ -1,8 +1,8 @@
 #pragma once
 
-#include "./qstm_test.h"
+#include "./qnotation_test.h"
 
-namespace QStm {
+namespace QNotationTest {
 
     class SDKGoogleTestUnit : public SDKGoogleTest{
     public:
