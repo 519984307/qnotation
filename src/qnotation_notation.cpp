@@ -53,6 +53,11 @@ QVariant Notation::value() const
     return this->_value;
 }
 
+bool Notation::isStatic() const
+{
+    return this->_isStatic;
+}
+
 QVariant Notation::toVariant() const
 {
     return this->toHash();
@@ -60,12 +65,12 @@ QVariant Notation::toVariant() const
 
 QVariantHash Notation::toHash() const
 {
-    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}};
+    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}, {QStringLiteral("s"), this->_isStatic}};
 }
 
 QVariantMap Notation::toMap() const
 {
-    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}};
+    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}, {QStringLiteral("s"), this->_isStatic}};
 }
 
 const Notation &Notation::from(const Notation &value)
@@ -73,6 +78,7 @@ const Notation &Notation::from(const Notation &value)
     this->_name = value.name();
     this->_value = value.value();
     this->_classification = value.classification();
+    this->_isStatic = value.isStatic();
     return*this;
 }
 
@@ -92,6 +98,7 @@ const Notation &Notation::from(const QVariant &value)
         this->_name=value.toByteArray().toLower().trimmed();
         this->_value.clear();
         this->_classification=0;
+        this->_isStatic=false;
         break;
     case QMetaType::QVariantHash:
     case QMetaType::QVariantMap:{
@@ -100,7 +107,8 @@ const Notation &Notation::from(const QVariant &value)
             break;
         this->_name = vHash.value(QStringLiteral("n")).toByteArray().trimmed().toLower();
         this->_value = vHash.value(QStringLiteral("v"));
-        this->_classification=vHash.value(QStringLiteral("c")).toInt();
+        this->_classification = vHash.value(QStringLiteral("c")).toInt();
+        this->_isStatic = vHash.value(QStringLiteral("s")).toBool();
         break;
     }
     default:
@@ -171,6 +179,7 @@ const Notation &Notation::clear()
     this->_name.clear();
     this->_value.clear();
     this->_classification=0;
+    this->_isStatic=false;
     return*this;
 }
 

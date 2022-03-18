@@ -28,7 +28,7 @@ public:
     //! \brief NotationExtended
     //! \param parent
     //!
-    Q_INVOKABLE explicit Extended(QObject *parent = nullptr);
+    explicit Extended(QObject *parent = nullptr);
     virtual ~Extended();
 
     //!
@@ -46,14 +46,15 @@ public:
     //!
     //! \brief notation
     //!
-    virtual NotationCollection notation() const;
+    virtual const NotationCollection &notation() const;
 
     //!
     //! \brief notation
     //! \param method
     //! \return
     //!
-    virtual NotationCollection notation(const QMetaMethod &method) const;
+    virtual const NotationCollection &notation(const QMetaMethod &method) const;
+    virtual const NotationCollection &notation(const QByteArray &methodName) const;
 
     //!
     //! \brief notationMethods

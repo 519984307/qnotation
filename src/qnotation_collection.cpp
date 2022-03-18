@@ -9,7 +9,7 @@ NotationCollection::NotationCollection()
 
 }
 
-bool NotationCollection::find(const QVariant &value, Notation &notationOut)
+bool NotationCollection::find(const QVariant &value, Notation &notationOut) const
 {
     const auto &notation=this->find(value);
     if(notation.isValid()){
@@ -21,27 +21,27 @@ bool NotationCollection::find(const QVariant &value, Notation &notationOut)
     return false;
 }
 
-const Notation &NotationCollection::find(const QVariant &value)
+const Notation &NotationCollection::find(const QVariant &value) const
 {
-    static Notation __return(value);
-    static Notation notationIn(value);
+    static Notation defaultValue;
+
+    Notation notationIn(value);
     if(!notationIn.isValid())
-        return __return;
+        return defaultValue;
 
     QHashIterator<QByteArray, Notation> i(*this);
     while(i.hasNext()){
         i.next();
         auto &notation=i.value();
-        if(notation==notationIn)
+        if(notation.name()==notationIn.name())
             return notation;
     }
-    return __return;
+    return defaultValue;
 }
 
 bool NotationCollection::contains(const QVariant &value)const
 {
-    static Notation __return(value);
-    static Notation notationIn(value);
+    Notation notationIn(value);
     if(!notationIn.isValid())
         return {};
 

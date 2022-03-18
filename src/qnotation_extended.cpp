@@ -16,22 +16,15 @@ public:
     //! \brief NotationExtendedPvt
     //! \param parent
     //!
-    explicit NotationExtendedPvt(QObject*parent)
+    explicit NotationExtendedPvt(QObject*parent):notationUtil{parent}
     {
+        if(parent==nullptr)
+            qFatal("invalid notation parent");
         this->parent=parent;
     }
 
     virtual ~NotationExtendedPvt()
     {
-    }
-
-    Util &nUtil()
-    {
-        if(!notationUtilLoaded){
-            notationUtilLoaded=true;
-            notationUtil.from(this->parent);
-        }
-        return this->notationUtil;
     }
 
 };
@@ -50,7 +43,7 @@ Extended::~Extended()
 Util &Extended::notationUtil()
 {
     dPvt();
-    return p.nUtil();
+    return p.notationUtil;
 }
 
 QObject *Extended::parent()
@@ -59,16 +52,22 @@ QObject *Extended::parent()
     return p.parent;
 }
 
-NotationCollection Extended::notation()const
+const NotationCollection &Extended::notation()const
 {
     dPvt();
     return p.notationUtil.notation();
 }
 
-NotationCollection Extended::notation(const QMetaMethod &method)const
+const NotationCollection &Extended::notation(const QMetaMethod &method)const
 {
     dPvt();
     return p.notationUtil.notation(method);
+}
+
+const NotationCollection &Extended::notation(const QByteArray &methodName) const
+{
+    dPvt();
+    return p.notationUtil.notation(methodName);
 }
 
 NotationCollection Extended::notationMethods() const

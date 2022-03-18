@@ -8,6 +8,7 @@ auto&p = *reinterpret_cast<UtilPvt*>(this->p)
 
 class UtilPvt{
 public:
+    bool inited=false;
     Util*util=nullptr;
     QObject*parent=nullptr;
     QHash<Util::Type, NotationCollection> notations;
@@ -21,7 +22,6 @@ public:
     {
         this->util=util;
         this->parent=parent;
-        this->buildNotations();
     }
 
     virtual ~UtilPvt()
@@ -54,41 +54,41 @@ public:
             vList<<notations;
         }
 
-        for(auto&v:vList){
-            auto vHash=v.toHash();
+        if(vList.isEmpty())
+            return __return;
 
-            if(vHash.isEmpty())
+        for(auto&v:vList){
+            Notation notation(v);
+
+            if(!notation.isValid())
                 continue;
 
-            QHashIterator<QString, QVariant> i(vHash);
-            while(i.hasNext()){
-                i.next();
-                auto v=i.value().toHash();
-                if(v.isEmpty())
-                    continue;
-
-                auto k=i.key().toUtf8();
-                __return.insert(k, Notation(v));
-            }
+            __return.insert(notation.name(), notation);
         }
         return __return;
     }
 
     //!
-    //! \brief buildNotations
+    //! \brief init
     //! \return
     //!
-    void buildNotations()
+    auto&init()
     {
-        if(this->parent==nullptr)//check Object to extract notations
-            return;
+        if(this->inited)
+            return*this;
 
-        static const auto ___notation_declare_=QByteArrayLiteral("___notation_declare_");//start name of QNotation methods
+        if(this->parent==nullptr)//check Object to extract notations
+            return*this;
+
+        this->inited=true;
 
         auto makeObject=this->parent;
         auto metaObject=makeObject->metaObject();
-        //class name
         auto notationRefereceClass=QByteArray(metaObject->className()).split(':').last().toLower();
+
+        static const auto ___notation_declaration=QByteArrayLiteral("___notation_declare_x_not_x_");//start name of QNotation methods
+
+        //class name
 
         NotationCollection vNotationsClass;
         NotationCollection vNotationsMethod;
@@ -96,23 +96,32 @@ public:
         for (auto i = 0; i < metaObject->methodCount(); ++i) {
             auto method = metaObject->method(i);
 
-            if(method.methodType()!=method.Method)//ignore no method
+            switch (method.methodType()) {
+            case QMetaMethod::Method:
+                break;
+            default:
                 continue;
+            }
 
             if(method.parameterCount()>0)//ignore method with parameters
                 continue;
 
-            const auto methodName = method.name().toLower();
-            if(!methodName.startsWith(___notation_declare_))//check method forma declaration for QNotation
+            const QString methodName = method.name().toLower();
+            if(!methodName.startsWith(___notation_declaration))//check method forma declaration for QNotation
                 continue;
 
-            const auto notationRefereceMethod=methodName.split('_').last();//extract method name at QNotation declaration
+            const auto notationRefereceMethod=methodName.split("_x_not_x_").last().toUtf8();//extract method name at QNotation declaration
 
             NotationCollection vNotationsMethodExclusive;//exclusive list for methods
+
             QVariant returnVariant;//variable to invoke response
+            auto argReturn=Q_RETURN_ARG(QVariant, returnVariant);
 
             //invoke QNotation method
-            if(method.invoke(makeObject, Qt::DirectConnection, Q_ARG(QVariant, returnVariant))){
+            if(method.invoke(makeObject, Qt::DirectConnection, argReturn)){
+
+                if(!returnVariant.isValid())
+                    continue;
 
                 auto notationList=notationMaker(returnVariant);
 
@@ -136,6 +145,7 @@ public:
         }
         //persist notation class and methods
         this->notations={{Util::Class, vNotationsClass}, {Util::Method, vNotationsMethod}};
+        return*this;
     }
 };
 
@@ -155,14 +165,14 @@ Util &Util::from(QObject *object)
 {
     dPvt();
     p.parent=object;
-    p.buildNotations();
+    p.init();
     return*this;
 }
 
 bool Util::contains(const QByteArray &methodName, const QVariant &vNotation)const
 {
     dPvt();
-    NotationCollection &notations=p.notationsMethods[methodName.toLower()];
+    NotationCollection &notations=p.init().notationsMethods[methodName.toLower()];
     const auto&notation=notations.find(vNotation);
     return notation.isValid();
 }
@@ -170,25 +180,32 @@ bool Util::contains(const QByteArray &methodName, const QVariant &vNotation)cons
 QHash<Util::Type, NotationCollection> &Util::notations()const
 {
     dPvt();
-    return p.notations;
+    return p.init().notations;
 }
 
 const NotationCollection &Util::notation()const
 {
     dPvt();
-    return p.notations[Util::Class];
+
+    return p.init().notations[Util::Class];
 }
 
-const NotationCollection Util::notation(const QMetaMethod &method) const
+const NotationCollection &Util::notation(const QMetaMethod &method) const
 {
     dPvt();
-    return p.notationsMethods[method.name()];
+    return p.init().notationsMethods[method.name()];
+}
+
+const NotationCollection &Util::notation(const QByteArray &methodName) const
+{
+    dPvt();
+    return p.init().notationsMethods[methodName];
 }
 
 const NotationCollection &Util::notationMethods() const
 {
     dPvt();
-    return p.notations[Util::Method];
+    return p.init().notations[Util::Method];
 }
 
 }

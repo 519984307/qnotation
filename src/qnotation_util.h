@@ -63,7 +63,8 @@ public:
     //! \param method
     //! \return
     //!
-    virtual const NotationCollection notation(const QMetaMethod &method)const;
+    virtual const NotationCollection &notation(const QMetaMethod &method)const;
+    virtual const NotationCollection &notation(const QByteArray &methodName)const;
 
     //!
     //! \brief notationMethods

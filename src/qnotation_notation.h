@@ -49,6 +49,12 @@ public:
     QVariant value()const;
 
     //!
+    //! \brief isStatic
+    //! \return
+    //!
+    bool isStatic()const;
+
+    //!
     //! \brief toVariant
     //! \return
     //!
@@ -137,6 +143,7 @@ private:
     QByteArray _name;
     QVariant _value;
     int _classification=0;
+    bool _isStatic=false;
 };
 
 }
