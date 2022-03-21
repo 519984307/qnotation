@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QObject>
-#include <QMetaMethod>
-#include <QHash>
-#include <QByteArray>
-#include "./qnotation_global.h"
 #include "./qnotation_collection.h"
+#include "./qnotation_global.h"
+#include <QByteArray>
+#include <QHash>
+#include <QMetaMethod>
+#include <QObject>
 
 namespace QNotation {
 
@@ -16,13 +16,10 @@ namespace QNotation {
 class Q_NOTATION_EXPORT Util
 {
 public:
-
     //!
     //! \brief The Type enum
     //!
-    enum Type{
-        Class, Method
-    };
+    enum Type { Class, Method };
 
     //!
     //! \brief Util
@@ -44,14 +41,14 @@ public:
     //! \param notationName
     //! \return
     //!
-    virtual bool contains(const QByteArray&methodName, const QVariant &vNotation) const;
+    virtual bool contains(const QByteArray &methodName, const QVariant &vNotation) const;
 
     //!
     //! \brief notationsClass
     //! \param parent
     //! \return
     //!
-    virtual QHash<Type, NotationCollection> &notations()const;
+    virtual QHash<Type, NotationCollection> &notations() const;
 
     //!
     //! \brief notation
@@ -63,16 +60,17 @@ public:
     //! \param method
     //! \return
     //!
-    virtual const NotationCollection &notation(const QMetaMethod &method)const;
-    virtual const NotationCollection &notation(const QByteArray &methodName)const;
+    virtual const NotationCollection &notation(const QMetaMethod &method) const;
+    virtual const NotationCollection &notation(const QByteArray &methodName) const;
 
     //!
     //! \brief notationMethods
     //! \return
     //!
-    virtual const NotationCollection &notationMethods()const;
+    virtual const NotationCollection &notationMethods() const;
+
 private:
-    void*p=nullptr;
+    void *p = nullptr;
 };
 
-}
+} // namespace QNotation

@@ -3,41 +3,38 @@
 
 namespace QNotation {
 
-#define dPvt()\
-auto&p = *reinterpret_cast<NotationExtendedPvt*>(this->p)
+#define dPvt() auto &p = *reinterpret_cast<NotationExtendedPvt *>(this->p)
 
-class NotationExtendedPvt{
+class NotationExtendedPvt
+{
 public:
-    QObject*parent=nullptr;
+    QObject *parent = nullptr;
     Util notationUtil;
-    bool notationUtilLoaded=false;
+    bool notationUtilLoaded = false;
 
     //!
     //! \brief NotationExtendedPvt
     //! \param parent
     //!
-    explicit NotationExtendedPvt(QObject*parent):notationUtil{parent}
+    explicit NotationExtendedPvt(QObject *parent) : notationUtil{parent}
     {
-        if(parent==nullptr)
+        if (parent == nullptr)
             qFatal("invalid notation parent");
-        this->parent=parent;
+        this->parent = parent;
     }
 
-    virtual ~NotationExtendedPvt()
-    {
-    }
-
+    virtual ~NotationExtendedPvt() {}
 };
 
 Extended::Extended(QObject *parent)
 {
-    this->p=new NotationExtendedPvt(parent);
+    this->p = new NotationExtendedPvt(parent);
 }
 
 Extended::~Extended()
 {
     dPvt();
-    delete&p;
+    delete &p;
 }
 
 Util &Extended::notationUtil()
@@ -52,13 +49,13 @@ QObject *Extended::parent()
     return p.parent;
 }
 
-const NotationCollection &Extended::notation()const
+const NotationCollection &Extended::notation() const
 {
     dPvt();
     return p.notationUtil.notation();
 }
 
-const NotationCollection &Extended::notation(const QMetaMethod &method)const
+const NotationCollection &Extended::notation(const QMetaMethod &method) const
 {
     dPvt();
     return p.notationUtil.notation(method);
@@ -76,5 +73,4 @@ NotationCollection Extended::notationMethods() const
     return p.notationUtil.notationMethods();
 }
 
-}
-
+} // namespace QNotation

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QObject>
-#include <QMetaMethod>
-#include <QHash>
-#include "./qnotation_global.h"
 #include "./qnotation_collection.h"
+#include "./qnotation_global.h"
 #include "./qnotation_util.h"
+#include <QHash>
+#include <QMetaMethod>
+#include <QObject>
 
 namespace QNotation {
 
@@ -16,13 +16,7 @@ namespace QNotation {
 class Q_NOTATION_EXPORT Extended
 {
 public:
-
-    enum Classification{
-        Information,
-        Documentation,
-        Audit,
-        Security
-    };
+    enum Classification { Information, Documentation, Audit, Security };
 
     //!
     //! \brief NotationExtended
@@ -60,9 +54,10 @@ public:
     //! \brief notationMethods
     //! \return
     //!
-    virtual NotationCollection notationMethods()const;
+    virtual NotationCollection notationMethods() const;
+
 private:
-    void*p=nullptr;
+    void *p = nullptr;
 };
 
-}
+} // namespace QNotation

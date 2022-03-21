@@ -3,10 +3,7 @@
 
 namespace QNotation {
 
-Notation::Notation()
-{
-
-}
+Notation::Notation() {}
 
 Notation::Notation(const Notation &value)
 {
@@ -18,22 +15,22 @@ Notation::Notation(const QVariant &value)
     this->from(value);
 }
 
-const Notation &Notation::operator=(const Notation&notation)
+const Notation &Notation::operator=(const Notation &notation)
 {
     return this->from(notation);
 }
 
-const Notation &Notation::operator=(const QVariant&notation)
+const Notation &Notation::operator=(const QVariant &notation)
 {
     return this->from(notation);
 }
 
-bool Notation::operator==(const Notation&value) const
+bool Notation::operator==(const Notation &value) const
 {
     return this->equal(value);
 }
 
-bool Notation::operator==(const QVariant&value)const
+bool Notation::operator==(const QVariant &value) const
 {
     return this->equal(value);
 }
@@ -65,12 +62,18 @@ QVariant Notation::toVariant() const
 
 QVariantHash Notation::toHash() const
 {
-    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}, {QStringLiteral("s"), this->_isStatic}};
+    return {{QStringLiteral("n"), this->_name},
+            {QStringLiteral("v"), this->_value},
+            {QStringLiteral("c"), this->_classification},
+            {QStringLiteral("s"), this->_isStatic}};
 }
 
 QVariantMap Notation::toMap() const
 {
-    return {{QStringLiteral("n"), this->_name}, {QStringLiteral("v"), this->_value}, {QStringLiteral("c"), this->_classification}, {QStringLiteral("s"), this->_isStatic}};
+    return {{QStringLiteral("n"), this->_name},
+            {QStringLiteral("v"), this->_value},
+            {QStringLiteral("c"), this->_classification},
+            {QStringLiteral("s"), this->_isStatic}};
 }
 
 const Notation &Notation::from(const Notation &value)
@@ -79,31 +82,30 @@ const Notation &Notation::from(const Notation &value)
     this->_value = value.value();
     this->_classification = value.classification();
     this->_isStatic = value.isStatic();
-    return*this;
+    return *this;
 }
-
 
 const Notation &Notation::from(const QVariant &value)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    int typeId=value.typeId();
+    int typeId = value.typeId();
 #else
-    int typeId=value.type();
+    int typeId = value.type();
 #endif
     switch (typeId) {
     case QMetaType::QByteArray:
     case QMetaType::QString:
     case QMetaType::QChar:
     case QMetaType::QBitArray:
-        this->_name=value.toByteArray().toLower().trimmed();
+        this->_name = value.toByteArray().toLower().trimmed();
         this->_value.clear();
-        this->_classification=0;
-        this->_isStatic=false;
+        this->_classification = 0;
+        this->_isStatic = false;
         break;
     case QMetaType::QVariantHash:
-    case QMetaType::QVariantMap:{
+    case QMetaType::QVariantMap: {
         auto vHash = value.toHash();
-        if(vHash.isEmpty())
+        if (vHash.isEmpty())
             break;
         this->_name = vHash.value(QStringLiteral("n")).toByteArray().trimmed().toLower();
         this->_value = vHash.value(QStringLiteral("v"));
@@ -114,42 +116,41 @@ const Notation &Notation::from(const QVariant &value)
     default:
         break;
     }
-    return*this;
+    return *this;
 }
 
 bool Notation::equal(const Notation &notation) const
 {
-    if(notation.name()!=this->name())
+    if (notation.name() != this->name())
         return {};
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    int typeId=this->_notation.typeId();
+    int typeId = this->_notation.typeId();
 #else
-    int typeId=this->_value.type();
+    int typeId = this->_value.type();
 #endif
     switch (typeId) {
     case QMetaType::QByteArray:
     case QMetaType::QString:
     case QMetaType::QChar:
-    case QMetaType::QBitArray:{
-        auto vA=this->value().toByteArray().trimmed().toLower();
-        auto vB=notation.value().toByteArray().trimmed().toLower();
-        if(vA!=vB)
+    case QMetaType::QBitArray: {
+        auto vA = this->value().toByteArray().trimmed().toLower();
+        auto vB = notation.value().toByteArray().trimmed().toLower();
+        if (vA != vB)
             return {};
         break;
     }
     case QMetaType::QVariantHash:
-    case QMetaType::QVariantMap:
-    {
-        auto vHashA=this->toHash();
-        auto vHashB=notation.toHash();
+    case QMetaType::QVariantMap: {
+        auto vHashA = this->toHash();
+        auto vHashB = notation.toHash();
         QHashIterator<QString, QVariant> i(vHashA);
-        while(i.hasNext()){
+        while (i.hasNext()) {
             i.next();
-            if(!vHashB.contains(i.key()))
+            if (!vHashB.contains(i.key()))
                 return {};
 
-            if(i.value()!=vHashB.value(i.key()))
+            if (i.value() != vHashB.value(i.key()))
                 return {};
         }
         break;
@@ -168,7 +169,7 @@ bool Notation::equal(const QVariant &value) const
 
 bool Notation::isValid() const
 {
-    if(this->_name.trimmed().isEmpty())
+    if (this->_name.trimmed().isEmpty())
         return false;
 
     return true;
@@ -178,9 +179,9 @@ const Notation &Notation::clear()
 {
     this->_name.clear();
     this->_value.clear();
-    this->_classification=0;
-    this->_isStatic=false;
-    return*this;
+    this->_classification = 0;
+    this->_isStatic = false;
+    return *this;
 }
 
-}
+} // namespace QNotation
