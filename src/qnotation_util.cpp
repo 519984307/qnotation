@@ -81,15 +81,15 @@ public:
 
         auto makeObject = this->parent;
         auto metaObject = makeObject->metaObject();
-        auto notationRefereceClass = QByteArray(metaObject->className()).split(':').last().toLower();
+        auto notRefereceClass = QByteArray(metaObject->className()).split(':').last().toLower();
 
         static const auto ___notation_declaration = QByteArrayLiteral(
             "___notation_declare_x_not_x_"); //start name of QNotation methods
 
         //class name
 
-        NotationCollection vNotationsClass;
-        NotationCollection vNotationsMethod;
+        NotationCollection vNotClass;
+        NotationCollection vNotMethod;
 
 
         for (auto i = 0; i < metaObject->methodCount(); ++i) {
@@ -107,12 +107,12 @@ public:
                     ___notation_declaration)) //check method forma declaration for QNotation
                 continue;
 
-            const auto notationRefereceMethod
+            const auto not_RefereceMethod
                 = methodName.split(QStringLiteral("_x_not_x_"))
                       .last()
                       .toUtf8(); //extract method name at QNotation declaration
 
-            NotationCollection vNotationsMethodExclusive; //exclusive list for methods
+            NotationCollection vNotMethodExclusive; //exclusive list for methods
 
             QVariant returnVariant; //variable to invoke response
             auto argReturn = Q_RETURN_ARG(QVariant, returnVariant);
@@ -122,29 +122,28 @@ public:
                 if (!returnVariant.isValid())
                     continue;
 
-                auto notationList = notationMaker(returnVariant);
+                auto notList = notationMaker(returnVariant);
 
-                if (notationList.isEmpty()) //skip to empty values
+                if (notList.isEmpty()) //skip to empty values
                     continue;
 
-                if (notationRefereceMethod
-                    == notationRefereceClass) { //check notation is the scope class
-                    for (auto &notation : notationList)
-                        vNotationsClass.insert(notation.name(), notation);
+                if (not_RefereceMethod == notRefereceClass) { //check notation is the scope class
+                    for (auto &notation : notList)
+                        vNotClass.insert(notation.name(), notation);
                     continue;
                 }
 
                 { //notations at scope methods
-                    for (auto &notation : notationList) {
-                        vNotationsMethod.insert(notation.name(), notation);
-                        vNotationsMethodExclusive.insert(notation.name(), notation);
+                    for (auto &notation : notList) {
+                        vNotMethod.insert(notation.name(), notation);
+                        vNotMethodExclusive.insert(notation.name(), notation);
                     }
-                    this->notationsMethods.insert(notationRefereceMethod, vNotationsMethodExclusive);
+                    this->notationsMethods.insert(not_RefereceMethod, vNotMethodExclusive);
                 }
             }
         }
         //persist notation class and methods
-        this->notations = {{Util::Class, vNotationsClass}, {Util::Method, vNotationsMethod}};
+        this->notations = {{Util::Class, vNotClass}, {Util::Method, vNotMethod}};
         return *this;
     }
 };
