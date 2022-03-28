@@ -125,7 +125,7 @@ bool Notation::equal(const Notation &notation) const
         return {};
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    int typeId = this->_notation.typeId();
+    int typeId = this->_value.typeId();
 #else
     int typeId = this->_value.type();
 #endif
