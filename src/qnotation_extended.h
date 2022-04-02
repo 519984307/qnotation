@@ -16,7 +16,7 @@ namespace QNotation {
 class Q_NOTATION_EXPORT Extended
 {
 public:
-    enum Classification { Information, Documentation, Audit, Security };
+    enum Classification { Information, Documentation, Audit, Security, Operation };
 
     //!
     //! \brief NotationExtended

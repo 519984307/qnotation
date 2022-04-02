@@ -191,7 +191,7 @@ const NotationCollection &Util::notation() const
 const NotationCollection &Util::notation(const QMetaMethod &method) const
 {
     dPvt();
-    return p.init().notationsMethods[method.name()];
+    return p.init().notationsMethods[method.name().toLower()];
 }
 
 const NotationCollection &Util::notation(const QByteArray &methodName) const

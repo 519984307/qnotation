@@ -36,16 +36,38 @@ const Notation &NotationCollection::find(const QVariant &value) const
 
 bool NotationCollection::contains(const QVariant &value) const
 {
-    Notation notationIn(value);
-    if (!notationIn.isValid())
+    const auto&vThis=*this;
+    if(vThis.isEmpty())
         return {};
 
-    QHashIterator<QByteArray, Notation> i(*this);
-    while (i.hasNext()) {
-        i.next();
-        auto &notation = i.value();
-        if (notation.name() == notationIn.name())
-            return true;
+    QVariantList vList;
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    int typeId = value.typeId();
+#else
+    int typeId = value.type();
+#endif
+    switch (typeId) {
+    case QMetaType::QVariantList:
+    case QMetaType::QStringList:
+        vList = value.toList();
+        break;
+    default:
+        vList << value;
+    }
+
+    for(auto &v:vList){
+        Notation notationIn(v);
+        if (!notationIn.isValid())
+            return {};
+
+        QHashIterator<QByteArray, Notation> i(vThis);
+        while (i.hasNext()) {
+            i.next();
+            auto &notation = i.value();
+            if (notation.name() == notationIn.name())
+                return true;
+        }
     }
     return {};
 }
