@@ -126,7 +126,7 @@ public:
     //! \param value
     //! \return
     //!
-    bool equal(const QVariant&value)const;
+    bool equal(const QVariant &value)const;
 
     //!
     //! \brief isValid

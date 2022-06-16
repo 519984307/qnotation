@@ -36,7 +36,7 @@ const Notation &NotationCollection::find(const QVariant &value) const
 
 bool NotationCollection::contains(const QVariant &value) const
 {
-    const auto&vThis=*this;
+    const auto &vThis=*this;
     if(vThis.isEmpty())
         return {};
 
