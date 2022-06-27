@@ -49,25 +49,25 @@ QObject *Extended::parent()
     return p.parent;
 }
 
-const NotationCollection &Extended::notation() const
+Collection &Extended::notation() const
 {
     dPvt();
     return p.notationUtil.notation();
 }
 
-const NotationCollection &Extended::notation(const QMetaMethod &method) const
+Collection &Extended::notation(const QMetaMethod &method) const
 {
     dPvt();
     return p.notationUtil.notation(method);
 }
 
-const NotationCollection &Extended::notation(const QByteArray &methodName) const
+Collection &Extended::notation(const QByteArray &methodName) const
 {
     dPvt();
     return p.notationUtil.notation(methodName);
 }
 
-NotationCollection Extended::notationMethods() const
+Collection &Extended::notationMethods() const
 {
     dPvt();
     return p.notationUtil.notationMethods();

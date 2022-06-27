@@ -1,5 +1,6 @@
 #include "./qnotation_notation.h"
 #include <QMetaType>
+#include <QJsonDocument>
 
 namespace QNotation {
 
@@ -13,6 +14,11 @@ Notation::Notation(const Notation &value)
 Notation::Notation(const QVariant &value)
 {
     this->from(value);
+}
+
+bool Notation::isStatic() const
+{
+    return this->_isStatic;
 }
 
 const Notation &Notation::operator=(const Notation &notation)
@@ -50,9 +56,40 @@ QVariant Notation::value() const
     return this->_value;
 }
 
-bool Notation::isStatic() const
+QString Notation::toValueString() const
 {
-    return this->_isStatic;
+    return this->toValueByteArray();
+}
+
+QByteArray Notation::toValueByteArray() const
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    int typeId = this->_value.typeId();
+#else
+    int typeId = this->_value.type();
+#endif
+    switch (typeId) {
+    case QMetaType::QVariantHash:
+    case QMetaType::QVariantMap:
+    case QMetaType::QVariantList:
+    case QMetaType::QStringList:
+        return QJsonDocument::fromVariant(this->_value).toJson(QJsonDocument::Compact);
+    default:
+        return this->_value.toByteArray().trimmed();
+    }
+}
+
+QVector<QByteArray> Notation::toValueStringVector() const
+{
+    QVector<QByteArray> __return;
+    for(auto&v:this->_value.toList())
+        __return.append(v.toByteArray());
+    return __return;
+}
+
+QVariantList Notation::toValueList() const
+{
+    return this->_value.toList();
 }
 
 QVariant Notation::toVariant() const

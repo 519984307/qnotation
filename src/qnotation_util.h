@@ -48,26 +48,26 @@ public:
     //! \param parent
     //! \return
     //!
-    virtual QHash<Type, NotationCollection> &notations() const;
+    virtual QHash<Type, Collection> &notations() const;
 
     //!
     //! \brief notation
     //!
-    virtual const NotationCollection &notation() const;
+    virtual Collection &notation() const;
 
     //!
     //! \brief notation
     //! \param method
     //! \return
     //!
-    virtual const NotationCollection &notation(const QMetaMethod &method) const;
-    virtual const NotationCollection &notation(const QByteArray &methodName) const;
+    virtual Collection &notation(const QMetaMethod &method) const;
+    virtual Collection &notation(const QByteArray &methodName) const;
 
     //!
     //! \brief notationMethods
     //! \return
     //!
-    virtual const NotationCollection &notationMethods() const;
+    virtual Collection &notationMethods() const;
 
 private:
     void *p = nullptr;

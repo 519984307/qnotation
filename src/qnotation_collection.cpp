@@ -2,9 +2,21 @@
 
 namespace QNotation {
 
-NotationCollection::NotationCollection() : QHash<QByteArray, Notation>{} {}
+Collection::Collection()
+    :
+      QHash<QByteArray, Notation>{}
+{
 
-bool NotationCollection::find(const QVariant &value, Notation &notationOut) const
+}
+
+Collection::Collection(const QHash<QByteArray, Notation> &collection)
+    :
+      QHash<QByteArray, Notation>{collection}
+{
+
+}
+
+bool Collection::find(const QVariant &value, Notation &notationOut) const
 {
     const auto &notation = this->find(value);
     if (notation.isValid()) {
@@ -16,7 +28,7 @@ bool NotationCollection::find(const QVariant &value, Notation &notationOut) cons
     return false;
 }
 
-const Notation &NotationCollection::find(const QVariant &value) const
+const Notation &Collection::find(const QVariant &value) const
 {
     static Notation defaultValue;
 
@@ -34,7 +46,7 @@ const Notation &NotationCollection::find(const QVariant &value) const
     return defaultValue;
 }
 
-bool NotationCollection::contains(const QVariant &value) const
+bool Collection::contains(const QVariant &value) const
 {
     const auto &vThis=*this;
     if(vThis.isEmpty())
@@ -72,7 +84,7 @@ bool NotationCollection::contains(const QVariant &value) const
     return {};
 }
 
-bool NotationCollection::containsClassification(int classification) const
+bool Collection::containsClassification(int classification) const
 {
     QHashIterator<QByteArray, Notation> i(*this);
     while (i.hasNext()) {

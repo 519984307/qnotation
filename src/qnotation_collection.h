@@ -11,12 +11,18 @@ namespace QNotation {
 //!
 //! \brief NotationCollection
 //!
-class Q_NOTATION_EXPORT NotationCollection:public QHash<QByteArray, Notation>{
+class Q_NOTATION_EXPORT Collection:public QHash<QByteArray, Notation>{
 public:
     //!
     //! \brief NotationCollection
     //!
-    explicit NotationCollection();
+    explicit Collection();
+
+    //!
+    //! \brief NotationCollection
+    //! \param collection
+    //!
+    explicit Collection(const QHash<QByteArray, Notation> &collection);
 
     //!
     //! \brief find
@@ -45,6 +51,7 @@ public:
     //! \return
     //!
     bool containsClassification(int classification)const;
+
 };
 
 }

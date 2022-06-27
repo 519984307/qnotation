@@ -31,6 +31,12 @@ public:
     explicit Notation(const QVariant &value);
 
     //!
+    //! \brief isStatic
+    //! \return
+    //!
+    bool isStatic()const;
+
+    //!
     //! \brief name
     //! \return
     //!
@@ -49,10 +55,28 @@ public:
     QVariant value()const;
 
     //!
-    //! \brief isStatic
+    //! \brief toValueString
     //! \return
     //!
-    bool isStatic()const;
+    QString toValueString()const;
+
+    //!
+    //! \brief toValueByteArray
+    //! \return
+    //!
+    QByteArray toValueByteArray()const;
+
+    //!
+    //! \brief toValueStringVector
+    //! \return
+    //!
+    QVector<QByteArray> toValueStringVector()const;
+
+    //!
+    //! \brief toValueList
+    //! \return
+    //!
+    QVariantList toValueList()const;
 
     //!
     //! \brief toVariant

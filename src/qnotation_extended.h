@@ -40,21 +40,21 @@ public:
     //!
     //! \brief notation
     //!
-    virtual const NotationCollection &notation() const;
+    virtual Collection &notation() const;
 
     //!
     //! \brief notation
     //! \param method
     //! \return
     //!
-    virtual const NotationCollection &notation(const QMetaMethod &method) const;
-    virtual const NotationCollection &notation(const QByteArray &methodName) const;
+    virtual Collection &notation(const QMetaMethod &method) const;
+    virtual Collection &notation(const QByteArray &methodName) const;
 
     //!
     //! \brief notationMethods
     //! \return
     //!
-    virtual NotationCollection notationMethods() const;
+    virtual Collection &notationMethods() const;
 
 private:
     void *p = nullptr;
